@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -5,7 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using TicTacToe.Web.Areas.Identity;
-using TicTacToe.Web.Data;
+using TicTacToe.Data;
+using Microsoft.Extensions.Hosting;
 
 namespace TicTacToe.Web
 {
@@ -13,8 +15,8 @@ namespace TicTacToe.Web
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
-
+            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+            
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -25,7 +27,6 @@ namespace TicTacToe.Web
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
             builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-            builder.Services.AddSingleton<WeatherForecastService>();
 
             var app = builder.Build();
 
@@ -55,5 +56,7 @@ namespace TicTacToe.Web
 
             app.Run();
         }
+        
     }
+
 }
